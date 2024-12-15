@@ -1,0 +1,56 @@
+created:
+    - database/factories/RoleFactory.php
+    - database/factories/CompanyFactory.php
+    - database/factories/WebsiteZoneFactory.php
+    - database/factories/WebsiteFactory.php
+    - database/factories/WebsiteRatingFactory.php
+    - database/factories/CategoryFactory.php
+    - database/factories/EmailChangeRequestFactory.php
+    - database/factories/OrderFactory.php
+    - database/factories/OrderCommentFactory.php
+    - database/factories/ProjectFactory.php
+    - database/factories/ProjectDomainFactory.php
+    - database/factories/AssignmentFactory.php
+    - database/factories/BacklinkProfileFactory.php
+    - database/migrations/2024_12_11_171431_create_roles_table.php
+    - database/migrations/2024_12_11_171432_create_companies_table.php
+    - database/migrations/2024_12_11_171433_create_website_zones_table.php
+    - database/migrations/2024_12_11_171434_create_websites_table.php
+    - database/migrations/2024_12_11_171435_create_website_ratings_table.php
+    - database/migrations/2024_12_11_171436_create_categories_table.php
+    - database/migrations/2024_12_11_171437_create_email_change_requests_table.php
+    - database/migrations/2024_12_11_171438_create_orders_table.php
+    - database/migrations/2024_12_11_171439_create_order_comments_table.php
+    - database/migrations/2024_12_11_171440_create_projects_table.php
+    - database/migrations/2024_12_11_171441_create_project_domains_table.php
+    - database/migrations/2024_12_11_171442_create_assignments_table.php
+    - database/migrations/2024_12_11_171443_create_backlink_profiles_table.php
+    - database/migrations/2024_12_11_171444_create_category_website_table.php
+    - app/Models/Role.php
+    - app/Models/Company.php
+    - app/Models/WebsiteZone.php
+    - app/Models/Website.php
+    - app/Models/WebsiteRating.php
+    - app/Models/Category.php
+    - app/Models/EmailChangeRequest.php
+    - app/Models/Order.php
+    - app/Models/OrderComment.php
+    - app/Models/Project.php
+    - app/Models/ProjectDomain.php
+    - app/Models/Assignment.php
+    - app/Models/BacklinkProfile.php
+models:
+    User: { name: string, email: string, export_fields: 'json nullable', marketplace_columns: 'json nullable', websites_exported_this_month: integer, email_verified_at: 'timestamp nullable', password: string, is_supplier: boolean, remember_token: 'string:100 nullable' }
+    Role: { name: string }
+    Company: { name: string, backlinks_retrieved: 'integer default:0', backlink_retrieval_limit: 'integer default:10000', address: 'string nullable', city: 'string nullable', country: 'string nullable', postal_code: 'string nullable', exclude_stripe_wallet: 'boolean default:false', relationships: { hasMany: project } }
+    WebsiteZone: { name: string, description: 'string nullable', relationships: { hasMany: website } }
+    Website: { domain_name: string, cost_price: decimal, retail_price: decimal, margin: decimal, supplier_email: string, pictures: 'string nullable', ip_address: 'string nullable', follow: 'boolean default:true', sponsored_tag: 'boolean default:false', backlinks: 'integer default:1', main_country: 'string nullable', delete_reason: 'string nullable', blog_duration: "string default:'permanent'", write_content: "string default:'dng'", minimal_words: 'integer default:500', website_type: "string default:'blog'", dng_requirements: 'string nullable', content_requirements: 'string nullable', supplier_requirements: 'string nullable', relationships: { belongsToMany: category, hasOne: website_rating, belongsTo: website_zone } }
+    WebsiteRating: { ahrefs_updated: datetime, ahrefs_domain_rating: integer, ahrefs_referring_domains: integer, ahrefs_url_rating: integer, ahrefs_linked_domains: integer, majestic_citation_flow: integer, majestic_trust_flow: integer, moz_domain_authority: integer, moz_spam_score: integer, relationships: { belongsTo: website } }
+    Category: { name: string, translation_key: 'string nullable', website_count: 'integer nullable', relationships: { belongsToMany: website } }
+    EmailChangeRequest: { new_email: string, user_id: 'signed integer', hash: char(36), expires_at: datetime }
+    Order: { uuid: string, briefing: 'text nullable', payment_status: string, payment_method: string, user_id: 'signed integer', relationships: { hasMany: 'assignment, order_comment' } }
+    OrderComment: { title: string, text: text, order_id: 'signed integer', user_id: 'signed integer', edited_at: 'datetime nullable', relationships: { belongsTo: 'order, user' } }
+    Project: { name: string, company_id: 'signed integer', relationships: { hasMany: project_domain, belongsTo: company } }
+    ProjectDomain: { domain_name: string, domain_alias: 'string nullable', company_id: 'signed integer', project_id: 'signed integer', relationships: { belongsTo: 'project, company', hasMany: backlink_profile } }
+    Assignment: { company_id: 'signed integer', project_id: 'signed integer', website_id: 'signed integer', project_domain_id: 'signed integer', order_id: integer, relationships: { belongsTo: 'company, project, website, project_domain, order' } }
+    BacklinkProfile: { domain_name: string, majestic_referring_domains: integer, majestic_trust_flow: integer, majestic_citation_flow: integer, first_seen: datetime, last_seen: datetime, ip_address: string, country: string, relationships: { hasOne: project_domain } }

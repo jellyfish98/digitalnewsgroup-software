@@ -1,0 +1,127 @@
+models:
+  Role:
+    name: string
+
+  Company:
+    name: string
+    backlinks_retrieved: integer default:0
+    backlink_retrieval_limit: integer default:10000
+    address: string nullable
+    city: string nullable
+    country: string nullable
+    postal_code: string nullable
+    exclude_stripe_wallet: boolean default:false
+    relationships:
+      hasMany: project
+
+  WebsiteZone:
+    name: string
+    description: string nullable
+    relationships:
+      hasMany: website
+
+  Website:
+    domain_name: string
+    cost_price: decimal
+    retail_price: decimal
+    margin: decimal
+    supplier_email: string
+    pictures: string nullable
+    ip_address: string nullable
+    follow: boolean default:true
+    sponsored_tag: boolean default:false
+    backlinks: integer default:1
+    main_country: string nullable
+    delete_reason: string nullable
+    blog_duration: string default:'permanent'
+    write_content: string default:'dng'
+    minimal_words: integer default:500
+    website_type: string default:'blog'
+    dng_requirements: string nullable
+    content_requirements: string nullable
+    supplier_requirements: string nullable
+    relationships:
+      belongsToMany: category
+      hasOne: website_rating
+      belongsTo: website_zone
+
+  WebsiteRating:
+    ahrefs_updated: datetime
+    ahrefs_domain_rating: integer
+    ahrefs_referring_domains: integer
+    ahrefs_url_rating: integer
+    ahrefs_linked_domains: integer
+    majestic_citation_flow: integer
+    majestic_trust_flow: integer
+    moz_domain_authority: integer
+    moz_spam_score: integer
+    relationships:
+      belongsTo: website
+
+  Category:
+    name: string
+    translation_key: string nullable
+    website_count: integer nullable
+    relationships:
+      belongsToMany: website
+
+  EmailChangeRequest:
+    new_email: string
+    user_id: signed integer
+    hash: char(36)
+    expires_at: datetime
+
+  Order:
+    uuid: string
+    briefing: text nullable
+    payment_status: string
+    payment_method: string
+    user_id: signed integer
+    relationships:
+      hasMany: assignment, order_comment
+
+  OrderComment:
+    title: string
+    text: text
+    order_id: signed integer
+    user_id: signed integer
+    edited_at: datetime nullable
+    relationships:
+      belongsTo: order, user
+
+  Project:
+    name: string
+    company_id: signed integer
+    relationships:
+      hasMany: project_domain
+      belongsTo: company
+
+  ProjectDomain:
+    domain_name: string
+    domain_alias: string nullable
+    company_id: signed integer
+    project_id: signed integer
+    relationships:
+      belongsTo: project, company
+      hasMany: backlink_profile
+
+  Assignment:
+    company_id: signed integer
+    project_id: signed integer
+    website_id: signed integer
+    project_domain_id: signed integer
+    order_id: integer
+    relationships:
+      belongsTo: company, project, website, project_domain, order
+
+  BacklinkProfile:
+    domain_name: string
+    majestic_referring_domains: integer
+    majestic_trust_flow: integer
+    majestic_citation_flow: integer
+    first_seen: datetime
+    last_seen: datetime
+    ip_address: string
+    country: string
+    relationships:
+      hasOne: project_domain
