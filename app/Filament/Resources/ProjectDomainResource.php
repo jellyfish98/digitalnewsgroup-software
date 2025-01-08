@@ -59,12 +59,12 @@ class ProjectDomainResource extends Resource
                     ->label(__('Project')),
             ])
             ->actions([
-                \App\Filament\Tables\Actions\EditAction::make()
+                Tables\Actions\EditAction::make()
                 ->slideOver(),
             ])
             ->bulkActions([
-                \App\Filament\Tables\Actions\BulkActionGroup::make([
-                    \App\Filament\Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

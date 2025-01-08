@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\WebsiteResource\Pages;
 use App\Filament\Resources\WebsiteResource\RelationManagers;
 use App\Filament\Tables\Actions\OrderBulkAction;
+use App\Models\Order;
 use App\Models\Website;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
@@ -196,14 +197,29 @@ class WebsiteResource extends Resource
                                 $fields[] = Forms\Components\Section::make('Details for ' . ($record->domain_name ?? 'Record ' . $record->id))
                                     ->collapsible()
                                     ->schema([
-                                        Forms\Components\Select::make('write_content.' . $record->id)
-                                            ->label('Who will write the content?')
-                                            ->options($writeContentOptions)
-                                            ->default($defaultWriteContent)
-                                            ->disabled($disabled)
-                                            ->required(!$disabled)
-                                            ->reactive(),
+                                        // Select field for write_content (still inside a Grid for layout)
+                                        Forms\Components\Grid::make()
+                                            ->schema([
+                                                Forms\Components\Select::make('write_content.' . $record->id)
+                                                    ->label('Who will write the content?')
+                                                    ->options($writeContentOptions)
+                                                    ->default($defaultWriteContent)
+                                                    ->disabled($disabled)
+                                                    ->required(!$disabled)
+                                                    ->reactive(),
+                                            ]),
 
+                                        // Hidden field for write_content (OUTSIDE the Grid, and NOT disabled)
+                                        Forms\Components\Hidden::make('write_content.' . $record->id)
+                                            // Update value based on select using "afterStateUpdated"
+                                            ->afterStateUpdated(function (\Filament\Forms\Set $set, $state) use ($record, $defaultWriteContent) {
+                                                if ($record->write_content === 'supplier') {
+                                                    $set('write_content.' . $record->id, $defaultWriteContent);
+                                                }
+                                            })
+                                            ->default($defaultWriteContent),
+
+                                        // Backlinks Fieldset (no changes here)
                                         Forms\Components\Fieldset::make('Backlinks')
                                             ->columns(2)
                                             ->schema(function ($get) use ($record) {
@@ -239,8 +255,7 @@ class WebsiteResource extends Resource
                             return $fields;
                         })
                         ->action(function (Collection $records, array $data) {
-                            // Filled with the data from the form.
-                            dd($data);
+                            Order::saveNewOrder($data);
                         }),
                     BulkAction::make('export')
                         ->icon('heroicon-o-document-arrow-down')
@@ -275,6 +290,11 @@ class WebsiteResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function canCreate(): bool
+    {
+        return false;
     }
 
     public static function getPages(): array

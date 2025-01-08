@@ -19,7 +19,7 @@ class Assignment extends Model
         'project_domain_id' => 'integer',
         'order_id' => 'integer',
         'anchor_pairs' => 'array',
-        'status' => AssignmentStatuses::class,
+//        'status' => AssignmentStatuses::class,
     ];
 
     public function company(): BelongsTo

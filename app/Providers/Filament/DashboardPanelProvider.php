@@ -6,6 +6,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -30,6 +31,8 @@ class DashboardPanelProvider extends PanelProvider
             ->id('dashboard')
             ->path('/')
             ->login()
+            ->registration()
+            ->sidebarCollapsibleOnDesktop()
             ->colors([
                 'primary' => Color::rgb('rgb(123, 0, 0)'),
             ])
@@ -53,6 +56,12 @@ class DashboardPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make('User Management')
+                    ->icon('heroicon-o-user-group'),
+                NavigationGroup::make('Shopping')
+                    ->icon('heroicon-o-shopping-cart'),
             ])
             ->authMiddleware([
                 Authenticate::class,
