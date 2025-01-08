@@ -21,6 +21,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 
 class DashboardPanelProvider extends PanelProvider
 {
@@ -62,6 +63,14 @@ class DashboardPanelProvider extends PanelProvider
                     ->icon('heroicon-o-user-group'),
                 NavigationGroup::make('Shopping')
                     ->icon('heroicon-o-shopping-cart'),
+            ])
+            ->plugins([
+                EnvironmentIndicatorPlugin::make()
+                    ->color(fn () => match (app()->environment()) {
+                        'production' => null,
+                        'staging' => Color::Orange,
+                        default => Color::Blue,
+                    })
             ])
             ->authMiddleware([
                 Authenticate::class,
