@@ -255,6 +255,17 @@ class WebsiteResource extends Resource
                         })
                         ->action(function (Collection $records, array $data) {
                             Order::saveNewOrder($data);
+                            Notification::make()->warning()
+                                ->title('Order placed!')
+                                ->persistent()
+                                ->actions([
+                                    \Filament\Notifications\Actions\Action::make('goToOrderOverview')
+                                        ->button()
+                                        ->color('success')
+                                        ->url(OrderResource::getUrl())
+                                ])
+                                ->body('Click the button below to go to the order overview.')
+                                ->send();
                         }),
                     BulkAction::make('export')
                         ->icon('heroicon-o-document-arrow-down')
