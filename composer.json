@@ -10,7 +10,8 @@
         "filament/filament": "^3.2",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "pxlrbt/filament-environment-indicator": "^2.1"
+        "pxlrbt/filament-environment-indicator": "^2.1",
+        "valentin-morice/filament-json-column": "^1.5"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

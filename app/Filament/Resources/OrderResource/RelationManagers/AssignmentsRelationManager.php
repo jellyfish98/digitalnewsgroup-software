@@ -7,8 +7,6 @@ use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AssignmentsRelationManager extends RelationManager
 {
@@ -29,8 +27,8 @@ class AssignmentsRelationManager extends RelationManager
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('website.domain_name'),
-                Tables\Columns\TextColumn::make('anchor_pairs'),
                 Tables\Columns\TextColumn::make('website.retail_price')
+                    ->label('Retail Price')
                     ->money('EUR')
                     ->prefix('€')
                     ->numeric(decimalPlaces: 2, decimalSeparator: ',', thousandsSeparator: '.'),
@@ -44,6 +42,8 @@ class AssignmentsRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('project.name'),
                 Tables\Columns\TextColumn::make('projectDomain.domain_name'),
                 Tables\Columns\TextColumn::make('writer_name'),
+                Tables\Columns\ViewColumn::make('anchor_pairs')
+                    ->view('filament.tables.columns.assignment-anchors'),
             ])
             ->filters([
                 //

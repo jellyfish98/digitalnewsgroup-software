@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Clusters\Test;
+use App\Filament\Clusters\CompaniesAndProjects;
 use App\Filament\Resources\ProjectResource\Pages;
 use App\Filament\Resources\ProjectResource\RelationManagers;
 use App\Models\Project;
@@ -15,7 +15,7 @@ use Filament\Tables\Table;
 class ProjectResource extends Resource
 {
     protected static ?string $model = Project::class;
-    protected static ?string $cluster = Test::class;
+    protected static ?string $cluster = CompaniesAndProjects::class;
     protected static ?string $navigationParentItem = CompanyResource::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-folder';

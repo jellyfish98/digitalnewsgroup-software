@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Clusters\Test;
+use App\Filament\Clusters\CompaniesAndProjects;
 use App\Filament\Resources\CompanyResource\Pages;
 use App\Filament\Resources\CompanyResource\RelationManagers;
 use App\Models\Company;
@@ -11,13 +11,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CompanyResource extends Resource
 {
     protected static ?string $model = Company::class;
-    protected static ?string $cluster = Test::class;
+    protected static ?string $cluster = CompaniesAndProjects::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-building-office-2';
 

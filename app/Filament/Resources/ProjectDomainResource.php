@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Clusters\Test;
+use App\Filament\Clusters\CompaniesAndProjects;
 use App\Filament\Resources\ProjectDomainResource\Pages;
 use App\Filament\Resources\ProjectDomainResource\RelationManagers;
 use App\Models\ProjectDomain;
@@ -11,13 +11,11 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class ProjectDomainResource extends Resource
 {
     protected static ?string $model = ProjectDomain::class;
-    protected static ?string $cluster = Test::class;
+    protected static ?string $cluster = CompaniesAndProjects::class;
     protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
 
     protected static ?int $navigationSort = 3;

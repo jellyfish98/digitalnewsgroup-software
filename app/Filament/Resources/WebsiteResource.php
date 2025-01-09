@@ -2,28 +2,27 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\WebsiteResource\Pages;
-use App\Filament\Resources\WebsiteResource\RelationManagers;
+use App\Filament\Resources\WebsiteResource\{Pages, RelationManagers};
 use App\Filament\Tables\Actions\OrderBulkAction;
-use App\Models\Order;
-use App\Models\Website;
-use Filament\Forms;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
-use Filament\Resources\Resource;
-use Filament\Support\Enums\MaxWidth;
-use Filament\Tables;
 use App\Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\BulkAction;
-use Filament\Tables\Actions\BulkActionGroup;
-use Filament\Tables\Actions\DeleteBulkAction;
-use Filament\Tables\Actions\EditAction;
-use Filament\Tables\Enums\FiltersLayout;
-use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use App\Models\{Order, Website};
+use Filament\{Forms,
+    Forms\Components\TextInput,
+    Forms\Form,
+    Notifications\Notification,
+    Resources\Resource,
+    Support\Enums\MaxWidth,
+    Tables,
+    Tables\Actions\BulkAction,
+    Tables\Actions\BulkActionGroup,
+    Tables\Actions\DeleteBulkAction,
+    Tables\Actions\EditAction,
+    Tables\Enums\FiltersLayout,
+    Tables\Table
+};
 
 class WebsiteResource extends Resource
 {
@@ -75,6 +74,14 @@ class WebsiteResource extends Resource
                         default => 'primary',      // Blue for margins above 80%
                     })
                     ->sortable(),
+                Tables\Columns\TextColumn::make('write_content')
+                    ->formatStateUsing(function ($state) {
+                        return match ($state) {
+                            'supplier' => 'Supplier',
+                            'dng' => 'DNG',
+                        };
+                    })
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('supplier_email')
                     ->searchable()
                     ->searchable(isIndividual: true, isGlobal: false),
@@ -84,14 +91,6 @@ class WebsiteResource extends Resource
                     ->boolean(),
                 Tables\Columns\TextColumn::make('blog_duration')
                     ->formatStateUsing(fn($state) => ucwords($state))
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('write_content')
-                    ->formatStateUsing(function ($state) {
-                        return match ($state) {
-                            'supplier' => 'Supplier',
-                            'dng' => 'DNG',
-                        };
-                    })
                     ->searchable(),
                 Tables\Columns\TextColumn::make('minimal_words')
                     ->numeric(0, '', '.')

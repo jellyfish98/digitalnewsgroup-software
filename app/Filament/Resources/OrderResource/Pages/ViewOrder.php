@@ -11,6 +11,13 @@ class ViewOrder extends ViewRecord
 {
     protected static string $resource = OrderResource::class;
 
+    protected function getHeaderWidgets(): array
+    {
+        return [
+            OrderResource\Widgets\OrderStatsWidget::class
+        ];
+    }
+
     protected function getHeaderActions(): array
     {
         return [

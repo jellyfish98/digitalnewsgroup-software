@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\OrderResource\{Pages, RelationManagers};
+use App\Filament\Resources\OrderResource\{Pages, RelationManagers, Widgets\OrderStatsWidget};
 use Filament\Infolists\Components\{Section, TextEntry};
 use App\Models\Order;
 use Filament\Forms\Form;
@@ -93,6 +93,13 @@ class OrderResource extends Resource
     {
         return [
             RelationManagers\AssignmentsRelationManager::class,
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            OrderStatsWidget::class,
         ];
     }
 
