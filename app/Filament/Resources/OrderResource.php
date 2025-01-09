@@ -30,6 +30,15 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+			->emptyStateHeading('No Orders yet')
+			->emptyStateDescription('Orders will appear here once they are created.')
+			->emptyStateActions([
+				Tables\Actions\Action::make('create')
+					  ->label('Create Order')
+					  ->url(WebsiteResource::getUrl())
+					  ->icon('heroicon-m-plus')
+					  ->button(),
+			])
             ->columns([
                 Tables\Columns\TextColumn::make('uuid')
                     ->description(function ($record) {
@@ -96,7 +105,12 @@ class OrderResource extends Resource
         ];
     }
 
-    public static function getWidgets(): array
+	public static function canCreate(): bool
+	{
+		return false;
+	}
+
+	public static function getWidgets(): array
     {
         return [
             OrderStatsWidget::class,
@@ -107,7 +121,7 @@ class OrderResource extends Resource
     {
         return [
             'index' => Pages\ListOrders::route('/'),
-            'create' => Pages\CreateOrder::route('/create'),
+//            'create' => Pages\CreateOrder::route('/create'),
 //            'edit' => Pages\EditOrder::route('/{record}/edit'),
             'view' => Pages\ViewOrder::route('/{record}'),
         ];
